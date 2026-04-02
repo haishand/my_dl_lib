@@ -1,5 +1,5 @@
 from common.xp import *
-from common.layers import Affine, Sigmoid, SoftmaxWithLoss
+from common.layers import MyAffine, Affine, Sigmoid, SoftmaxWithLoss
 
 
 class TwoLayerNet:
@@ -15,9 +15,9 @@ class TwoLayerNet:
 
         # 生成层
         self.layers = [
-            Affine(W1, b1),
+            MyAffine(W1, b1),
             Sigmoid(),
-            Affine(W2, b2),
+            MyAffine(W2, b2),
         ]
 
         self.loss_layer = SoftmaxWithLoss()
@@ -32,7 +32,6 @@ class TwoLayerNet:
         """Run forward inference and return logits."""
         for layer in self.layers:
             x = layer.forward(x)
-
         return x
 
     def forward(self, x, t):

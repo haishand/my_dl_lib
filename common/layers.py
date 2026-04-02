@@ -1,5 +1,6 @@
 from common.xp import *
 from common.functions import softmax, cross_entropy_error
+from common.basic_layers import *
 
 
 class Sigmoid:
@@ -17,6 +18,28 @@ class Sigmoid:
     def backward(self, dout):
         """Compute sigmoid backward pass."""
         dx = dout * (1.0 - self.out) * self.out
+        return dx
+
+
+class MyAffine:
+    def __init__(self, W, b):
+        self.params = [W, b]
+        self.grads = [np.zeros_like(W), np.zeros_like(b)]
+        self.matmul = MatMul(W)
+        self.add = Add()
+        self.x = None
+
+    def forward(self, x):
+        self.x = x
+        out = self.matmul.forward(x)
+        out = self.add.forward(out, self.params[1])
+        return out
+
+    def backward(self, dout):
+        dout, db = self.add.backward(dout)
+        dx = self.matmul.backward(dout)
+        self.grads[0][...] = self.matmul.grads[0]
+        self.grads[1][...] = db
         return dx
 
 
