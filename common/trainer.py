@@ -21,7 +21,7 @@ class Trainer:
         model, optimizer = self.model, self.optimizer
         total_loss = 0
         loss_count = 0
-        
+
         start_time = time.time()
         for epoch in range(max_epoch):
             # 打乱
