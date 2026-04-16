@@ -120,6 +120,15 @@ def create_co_matrix(corpus, vocab_size, window_size=1):
     return co_matrix
 
 
+def ppmi_fast(C, verbose=False, eps=1e-8):
+    S = np.sum(C, axis=0)
+    N = np.sum(C)
+    SS = np.outer(S, S)
+    M = np.log2(C * N / (SS + eps) + eps)
+    M[M < 0] = 0
+    return M
+
+
 def ppmi(C, verbose=False, eps=1e-8):
     """生成PPMI（正的点互信息）
 
