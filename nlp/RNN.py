@@ -40,5 +40,22 @@ class RNN:
 
         self.grads[0][...] = self.mat_x.grads[0]
         self.grads[1][...] = self.mat_h.grads[0]
-        self.grads[2][...] = db
+        self.grads[2][...] = np.sum(db, axis=0)
         return dx, dh_prev
+
+
+# test code
+N, D, H = 2, 3, 4
+Wx = np.random.randn(D, H)
+Wh = np.random.randn(H, H)
+b = np.random.randn(1, H)
+
+rnn = RNN(Wx, Wh, b)
+x = np.random.randn(N, D)
+h_prev = np.random.randn(N, H)
+
+h_next = rnn.forward(x, h_prev)
+dx, dh = rnn.backward(np.ones_like(h_next))
+
+print(h_next.shape)
+print(dx.shape)
