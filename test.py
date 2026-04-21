@@ -1,7 +1,7 @@
 import time
 
 import numpy as np
-from common.layers import MatMul, SoftmaxWithLoss
+from common.layers import MatMul, SoftmaxWithLoss, AddLayer, MulLayer
 from common.functions import softmax, cross_entropy_error
 
 
@@ -13,14 +13,17 @@ W_out = np.random.randn(3, 7)
 
 in_layer0 = MatMul(W_in)
 in_layer1 = MatMul(W_in)
+add_layer = AddLayer()
+mul_layer = MulLayer()
 out_layer = MatMul(W_out)
 loss_layer = SoftmaxWithLoss()
 
 h0 = in_layer0.forward(c0)
 h1 = in_layer1.forward(c1)
 
-h = 0.5*(h0+h1)
-s = out_layer.forward(h)
+h2 = add_layer.forward(h0, h1)
+h3 = mul_layer.forward(0.5, h2)
+s = out_layer.forward(h3)
 t = np.array([0, 0, 1, 0, 0, 0, 0])
 s = loss_layer.forward(s, t)
 print(s)
