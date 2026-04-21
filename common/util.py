@@ -119,6 +119,14 @@ def create_co_matrix(corpus, vocab_size, window_size=1):
 
     return co_matrix
 
+def ppmi_fast(C, verbose=False, eps=1e-8):
+    S = np.sum(C, axis=0)
+    D = np.outer(S, S)
+    N = np.sum(C)
+
+    PPMI = np.log2(C * N / (D+eps) + eps)
+    PPMI[PPMI < 0] = 0
+    return PPMI
 
 def ppmi(C, verbose=False, eps=1e-8):
     """生成PPMI（正的点互信息）
@@ -140,7 +148,7 @@ def ppmi(C, verbose=False, eps=1e-8):
 
             if verbose:
                 cnt += 1
-                if cnt % (total // 100 + 1) == 0:
+                if cnt % (total // 10) == 0:
                     print("%.1f%% done" % (100 * cnt / total))
     return M
 
