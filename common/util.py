@@ -128,6 +128,15 @@ def ppmi_fast(C, verbose=False, eps=1e-8):
     PPMI[PPMI < 0] = 0
     return PPMI
 
+def ppmi_fast(C, verbose=False, eps=1e-8):
+    S = np.sum(C, axis=0)
+    N = np.sum(C)
+    SS = np.outer(S, S)
+    M = np.log2(C * N / (SS + eps) + eps)
+    M[M < 0] = 0
+    return M
+
+
 def ppmi(C, verbose=False, eps=1e-8):
     """生成PPMI（正的点互信息）
 

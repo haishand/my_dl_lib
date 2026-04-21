@@ -1,6 +1,81 @@
+from re import X
+from tkinter import Y
+
 from common.xp import *
 from common.functions import softmax, cross_entropy_error
 from common.basic_layers import *
+
+
+class AddLayer:
+    def __init__(self):
+        self.params, self.grads = [], []
+
+    def forward(self, x, y):
+        out = x + y
+        return out
+
+    def backward(self, dout=1):
+        dx = dout * 1
+        dy = dout * 1
+        return dx, dy
+
+
+class MulLayer:
+    def __init__(self):
+        self.params, self.grads = [], []
+        self.cache = None
+
+    def forward(self, x, y):
+        self.cache = (x, y)
+        out = x * y
+        return out
+
+    def backward(self, dout=1):
+        x, y = self.cache
+        dx = dout * y
+        dy = dout * x
+        return dx, dy
+
+
+class MatMul:
+    def __init__(self, W):
+        self.params = [W]
+        self.grads = [np.zeros_like(W)]
+        self.cache = None
+
+    def forward(self, x):
+        (W,) = self.params
+        self.cache = x
+        out = np.dot(x, W)
+        return out
+
+    def backward(self, dout=1):
+        (W,) = self.params
+        x = self.cache
+        dx = np.dot(dout, W.T)
+        dW = np.dot(self.x.T, dout)
+        self.grads[0][...] = dW
+        return dx
+
+
+class TanhLayer:
+    def __init__(self):
+        # 激活层无参数
+        self.params = []
+        self.grads = []
+        self.cache = None
+
+    def forward(self, x):
+        # 前向
+        y = np.tanh(x)
+        self.cache = y  # 缓存输出，反向要用
+        return y
+
+    def backward(self, dout):
+        y = self.cache
+        # tanh 导数: dy/dx = 1 - y²
+        dx = dout * (1 - y**2)
+        return dx
 
 
 class Sigmoid:
