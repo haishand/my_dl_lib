@@ -77,7 +77,7 @@ if torch.cuda.is_available():
 else:
     print("未检测到 GPU，保持 CPU 运行")
 
-print("\n===== 8. 常用统计函数 ====="
+print("\n===== 8. 常用统计函数 =====")
 st = torch.tensor([1.0, 2.0, 3.0, 4.0])
 print("和 sum:", st.sum().item())
 print("平均值 mean:", st.mean().item())
