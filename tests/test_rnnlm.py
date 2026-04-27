@@ -63,7 +63,7 @@ for epoch in range(max_epoch):
 
     # 3. 对各个epoch的ppl进行评价
     ppl = np.exp(total_loss/loss_count)
-    print(f'|epcoh {epoch} | ppl {ppl}.2f')
+    print(f'|epcoh {epoch} | ppl {ppl:.2f}')
     ppl_list.append(float(ppl))
     total_loss, loss_count = 0, 0
         
