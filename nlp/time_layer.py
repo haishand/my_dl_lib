@@ -147,8 +147,7 @@ class TimeEmbedding:
         out = np.empty((N, T, D), dtype="f")
         self.layers = []
         for t in range(T):
-            layer = Emb
-            edding(W)
+            layer = Embedding(W)
             out[:, t, :] = layer.forward(xs[:, t])
             self.layers.append(layer)
         return out

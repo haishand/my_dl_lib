@@ -1,12 +1,10 @@
-from nlp.time_layer import TimeAffine, TimeEmbedding, TimeRNN, TimeSoftmaxWithLoss
-from time_layers import *
 import numpy as np
-
-rn = np.random.randn
+from nlp.time_layer import *
 
 class SimpleRnnlm:
     def __init__(self, vocab_size, wordvec_size, hidden_size):
         V, D, H = vocab_size, wordvec_size, hidden_size
+        rn = np.random.randn
         
         # init weights
         embed_W = (rn(V, D)/100).astype('f')
@@ -30,3 +28,19 @@ class SimpleRnnlm:
         for layer in self.layers:
             self.params += layer.params
             self.grads += layer.grads
+
+    def forward(self, xs, ts):
+        for layer in self.layers:
+            xs = layer.forward(xs)
+        loss = self.loss_layer.forward(xs, ts)
+        return loss
+    
+    def backward(self, dout=1):
+        dout = self.loss_layer.backward(dout)
+        for layer in reversed(self.layers):
+            dout = layer.backward(dout)
+        return dout
+
+    def reset_state(self):
+        self.rnn_layer.reset_state()
+
