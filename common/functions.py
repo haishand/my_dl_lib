@@ -1,8 +1,8 @@
 from common.xp import *
 
 
+"""
 def softmax(x):
-    """Compute softmax probabilities for 1D or 2D input."""
     if x.ndim == 2:
         x = x - x.max(axis=1, keepdims=True)
         x = np.exp(x)
@@ -12,6 +12,13 @@ def softmax(x):
         x = np.exp(x) / np.sum(np.exp(x))
 
     return x
+"""
+
+
+def softmax(x, axis=-1):
+    x = x - np.max(x, axis=axis, keepdims=True)
+    exp_x = np.exp(x)
+    return exp_x / np.sum(exp_x, axis=axis, keepdims=True)
 
 
 def cross_entropy_error(y, t):
@@ -27,3 +34,12 @@ def cross_entropy_error(y, t):
     batch_size = y.shape[0]
 
     return -np.sum(np.log(y[np.arange(batch_size), t] + 1e-7)) / batch_size
+
+
+def sigmoid(x):
+    out = 1 / (1 + np.exp(-x))
+    return out
+
+
+def relu(x):
+    return np.maximum(0, x)
