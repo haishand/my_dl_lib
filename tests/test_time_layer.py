@@ -3,6 +3,7 @@ import sys
 
 sys.path.append(os.getcwd())
 from nlp.time_layer import *
+import pytest
 
 """
 词汇表 V = 5 个词：[我，爱，学，习，。]
@@ -28,3 +29,48 @@ def test_TimeSoftmaxWithLoss_shape():
     loss = layer.forward(xs, ts)
 
     assert isinstance(loss, (int, float))
+
+def test_TimeLSTM_forward_shape():
+    D = 5
+    H = 3
+    N = 2
+
+    Wx = rn(D, 4 * H)
+    Wh = rn(H, 4 * H)
+    b = rn(4 * H)
+
+    lstm = LSTM(Wx, Wh, b)
+
+    x = rn(N, D)
+    h_prev = rn(N, H)
+    c_prev = rn(N, H)
+
+    h_next, c_next = lstm.forward(x, h_prev, c_prev)
+
+    assert h_next.shape == (N, H)
+    assert c_next.shape == (N, H)
+
+def test_TimeLSTM_backward_shape():
+    D = 5
+    H = 3
+    N = 2
+
+    Wx = rn(D, 4 * H)
+    Wh = rn(H, 4 * H)
+    b = rn(4 * H)
+
+    lstm = LSTM(Wx, Wh, b)
+
+    x = rn(N, D)
+    h_prev = rn(N, H)
+    c_prev = rn(N, H)
+
+    h_next, c_next = lstm.forward(x, h_prev, c_prev)
+
+    dh = rn(N, H)
+    dc = rn(N, H)
+    dx, dh_prev, dc_prev = lstm.backward(dh, dc)
+
+    assert dx.shape == (N, D)
+    assert dh_prev.shape == (N, H)
+    assert dc_prev.shape == (N, H)

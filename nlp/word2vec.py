@@ -7,7 +7,7 @@ from common.util import convert_one_hot, preprocess, create_contexts_target
 from common.optimizer import SGD
 from CBOW import SimpleCBOW
 from common.trainer import Trainer
-from simple_skip_gram import SimpleSkipGram
+from skip_gram import Skip_Gram
 
 max_epoch = 1000
 batch_size = 3
