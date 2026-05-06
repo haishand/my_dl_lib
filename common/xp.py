@@ -14,4 +14,8 @@ else:
     import numpy as np
 
 
+# 生成 -∞ ~ +∞ 正态分布
 rn = np.random.randn
+
+# 生成 0 ~ 1 之间均匀分布
+rd = np.random.rand

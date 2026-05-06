@@ -1,5 +1,6 @@
 import os
 import sys
+
 sys.path.append(os.getcwd())
 
 from dataset import ptb
@@ -18,14 +19,14 @@ max_epoch = 4
 max_grad = 0.25
 
 # 读入训练数据
-corpus, word_to_id, id_to_word = ptb.load_data('train')
-corpus_test, _, _ = ptb.load_data('test')
+corpus, word_to_id, id_to_word = ptb.load_data("train")
+corpus_test, _, _ = ptb.load_data("test")
 vocab_size = len(word_to_id)
 
 xs = corpus[:-1]
 ts = corpus[1:]
 
-print(vocab_size, wordvec_size, hidden_size)
+# print(vocab_size, wordvec_size, hidden_size)
 
 # 生成模型
 model = LSTMLM(vocab_size, wordvec_size, hidden_size)

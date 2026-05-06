@@ -1,5 +1,6 @@
 # coding: utf-8
 import os
+import sys
 from common.xp import *
 
 
@@ -119,14 +120,16 @@ def create_co_matrix(corpus, vocab_size, window_size=1):
 
     return co_matrix
 
+
 def ppmi_fast(C, verbose=False, eps=1e-8):
     S = np.sum(C, axis=0)
     D = np.outer(S, S)
     N = np.sum(C)
 
-    PPMI = np.log2(C * N / (D+eps) + eps)
+    PPMI = np.log2(C * N / (D + eps) + eps)
     PPMI[PPMI < 0] = 0
     return PPMI
+
 
 def ppmi_fast(C, verbose=False, eps=1e-8):
     S = np.sum(C, axis=0)

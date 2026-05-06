@@ -5,6 +5,7 @@ import pickle
 from common.base_model import BaseModel
 from nlp.time_layer import *
 
+
 class LSTMLM(BaseModel):
     def __init__(self, vocab_size, wordvec_size, hidden_size):
         super().__init__()
@@ -41,9 +42,12 @@ class LSTMLM(BaseModel):
             xs = layer.forward(xs)
         loss = self.loss_layer.forward(xs, ts)
         return loss
-    
+
     def backward(self, dout=1):
         dout = self.loss_layer.backward(dout)
         for layer in reversed(self.layers):
             dout = layer.backward(dout)
         return dout
+
+    def reset_state(self):
+        self.lstm_layer.reset_state()

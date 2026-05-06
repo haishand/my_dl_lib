@@ -269,7 +269,7 @@ class TimeLSTM:
     def forward(self, xs):
         Wx, Wh, b = self.params
         N, T, D = xs.shape
-        D, H = Wx.shape
+        H = Wh.shape[0]
 
         self.layers = []
         hs = np.empty((N, T, H), dtype="f")
@@ -285,7 +285,7 @@ class TimeLSTM:
             hs[:, t, :] = self.h
             self.layers.append(layer)
         return hs
-    
+
     def backward(self, dhs):
         Wx, Wh, b = self.params
         N, T, H = dhs.shape
@@ -294,14 +294,14 @@ class TimeLSTM:
         dxs = np.empty((N, T, D), dtype="f")
         dh = np.zeros_like(self.h)
         dc = np.zeros_like(self.c)
-        grads = 0
+        grads = [0, 0, 0]
         for t in reversed(range(T)):
             layer = self.layers[t]
             dx, dh, dc = layer.backward(dhs[:, t, :] + dh, dc)
             dxs[:, t, :] = dx
 
             for i, grad in enumerate(layer.grads):
-                grads += grad
+                grads[i] += grad
 
         for i, grad in enumerate(grads):
             self.grads[i][...] = grad
@@ -315,3 +315,25 @@ class TimeLSTM:
     def reset_state(self):
         self.h = None
         self.c = None
+
+
+class TimeDropout:
+    def __init__(self, dropout_ratio=0.5):
+        self.dropout_ratio = dropout_ratio
+        self.train_flg = True
+
+    def forward(self, xs):
+        if self.train_flg:  # 训练模式，执行dropout
+            flg = rd(*xs.shape) > self.dropout_ratio
+
+            scale = 1.0 / (1.0 - self.dropout_ratio)
+
+            self.mask = flg.astype("f") * scale
+
+            return xs * self.mask
+
+        else:  # 测试模式，不做dropout，直接返回
+            return xs
+
+    def backward(self, dout):
+        return dout * self.mask
