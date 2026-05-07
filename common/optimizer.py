@@ -18,10 +18,12 @@ class SGD:
 
 class AdaGrad:
     def __init__(self, lr):
+        """Initialize the AdaGrad instance."""
         self.lr = lr
         self.h = None
 
     def update(self, params, grads):
+        """Update parameters using gradients."""
         if self.h is None:
             self.h = []
             for param in params:

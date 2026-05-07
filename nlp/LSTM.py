@@ -4,11 +4,13 @@ from common.functions import sigmoid
 
 class LSTM:
     def __init__(self, Wx, Wh, b):
+        """Initialize the LSTM instance."""
         self.params = [Wx, Wh, b]
         self.grads = [np.zeros_like(Wx), np.zeros_like(Wh), np.zeros_like(b)]
         self.cache = None
 
     def forward(self, x, h_prev, c_prev):
+        """Run the forward pass."""
         Wx, Wh, b = self.params
         N, H = h_prev.shape
 
@@ -32,6 +34,7 @@ class LSTM:
         return h_next, c_next
 
     def backward(self, dh, dc):
+        """Run the backward pass."""
         x, h_prev, c_prev, i, f, g, o, c_next = self.cache
         Wx, Wh, b = self.params
 

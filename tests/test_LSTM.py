@@ -15,6 +15,7 @@ rn = np.random.randn
 
 # forward 输出形状的正确
 def test_lstm_forward_shape():
+    """Execute test_lstm_forward_shape."""
     D = 5
     H = 3
     N = 2
@@ -37,6 +38,7 @@ def test_lstm_forward_shape():
 
 # backward 输出形状正确
 def test_lstm_backward_shape():
+    """Execute test_lstm_backward_shape."""
     D = 5
     H = 3
     N = 2
@@ -64,6 +66,7 @@ def test_lstm_backward_shape():
 
 # grads 不为0, 不为nan
 def test_lstm_grads_not_zero_or_nan():
+    """Execute test_lstm_grads_not_zero_or_nan."""
     D = 5
     H = 3
     N = 2

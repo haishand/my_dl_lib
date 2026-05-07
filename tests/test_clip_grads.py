@@ -12,6 +12,7 @@ grads = [dW1, dW2]
 max_norm = 5.0
 
 def calc_norm(grads):
+    """Execute calc_norm."""
     norm = 0
     for g in grads:
         norm += np.sum(g**2)

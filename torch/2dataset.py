@@ -10,16 +10,19 @@ class MyDataset(Dataset):
     # 初始化：把数据读进来
     def __init__(self):
         # 模拟数据：10个样本，每个样本4个特征
+        """Initialize the MyDataset instance."""
         self.data = torch.tensor(np.random.randn(10, 4), dtype=torch.float32)
         # 模拟标签：10个标签
         self.label = torch.tensor(np.random.randint(0, 2, size=(10,)), dtype=torch.long)
 
     # 返回总共有多少条数据
     def __len__(self):
+        """Execute __len__."""
         return len(self.data)
 
     # 返回第 index 条数据（核心！）
     def __getitem__(self, index):
+        """Execute __getitem__."""
         x = self.data[index]
         y = self.label[index]
         return x, y

@@ -12,6 +12,7 @@ import pytest
 
 """
 def test_TimeSoftmaxWithLoss_shape():
+    """Execute test_TimeSoftmaxWithLoss_shape."""
     layer = TimeSoftmaxWithLoss()
 
     ts = [
@@ -31,6 +32,7 @@ def test_TimeSoftmaxWithLoss_shape():
     assert isinstance(loss, (int, float))
 
 def test_TimeLSTM_forward_shape():
+    """Execute test_TimeLSTM_forward_shape."""
     D = 5
     H = 3
     N = 2
@@ -51,6 +53,7 @@ def test_TimeLSTM_forward_shape():
     assert c_next.shape == (N, H)
 
 def test_TimeLSTM_backward_shape():
+    """Execute test_TimeLSTM_backward_shape."""
     D = 5
     H = 3
     N = 2

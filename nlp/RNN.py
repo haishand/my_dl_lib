@@ -8,6 +8,7 @@ from common.layers import MatMul, AddLayer, TanhLayer
 
 class RNN:
     def __init__(self, Wx, Wh, b) -> None:
+        """Initialize the RNN instance."""
         self.params = [Wx, Wh, b]
         self.grads = [np.zeros_like(Wx), np.zeros_like(Wh), np.zeros_like(b)]
 
@@ -20,6 +21,7 @@ class RNN:
         self.cache = None
 
     def forward(self, x, h_prev):
+        """Run the forward pass."""
         Wx, Wh, b = self.params
 
         h_Wh = self.mat_h.forward(h_prev)
@@ -30,6 +32,7 @@ class RNN:
         return h_next
 
     def backward(self, dh_next):
+        """Run the backward pass."""
         Wx, Wh, b = self.params
 
         dsum2 = self.tanh.backward(dh_next)

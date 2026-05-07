@@ -6,6 +6,7 @@ from nlp.RNN import RNN
 import numpy as np
 
 def test_rnn_forward_shape():
+    """Execute test_rnn_forward_shape."""
     D = 5
     H = 3
     N = 2
@@ -24,6 +25,7 @@ def test_rnn_forward_shape():
     assert h_next.shape == (N, H)
 
 def test_rnn_backward_shape():
+    """Execute test_rnn_backward_shape."""
     D = 5
     H = 3
     N = 2

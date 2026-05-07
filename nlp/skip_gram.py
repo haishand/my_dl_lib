@@ -5,6 +5,7 @@ from common.layers import MatMul, SoftmaxWithLoss
 
 class Skip_Gram:
     def __init__(self, vocab_size, hidden_size):
+        """Initialize the Skip_Gram instance."""
         V, H = vocab_size, hidden_size
 
         W_in = 0.01 * np.random.randn(V, H).astype("f")
@@ -25,6 +26,7 @@ class Skip_Gram:
         self.word_vec = W_in
 
     def forward(self, context, targets):
+        """Run the forward pass."""
         h = self.in_layer.forward(context)
         out = self.out_layer.forward(h)
         loss0 = self.loss_layer0.forward(out, targets[:, 0, :])
@@ -34,6 +36,7 @@ class Skip_Gram:
         return loss
 
     def backward(self, dout=1):
+        """Run the backward pass."""
         dl0 = self.loss_layer0.backward(dout)
         dl1 = self.loss_layer1.backward(dout)
         ds = dl0 + dl1

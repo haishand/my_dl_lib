@@ -3,6 +3,7 @@ from nlp.time_layer import *
 
 class SimpleRnnlm:
     def __init__(self, vocab_size, wordvec_size, hidden_size):
+        """Initialize the SimpleRnnlm instance."""
         V, D, H = vocab_size, wordvec_size, hidden_size
         rn = np.random.randn
         
@@ -30,17 +31,20 @@ class SimpleRnnlm:
             self.grads += layer.grads
 
     def forward(self, xs, ts):
+        """Run the forward pass."""
         for layer in self.layers:
             xs = layer.forward(xs)
         loss = self.loss_layer.forward(xs, ts)
         return loss
     
     def backward(self, dout=1):
+        """Run the backward pass."""
         dout = self.loss_layer.backward(dout)
         for layer in reversed(self.layers):
             dout = layer.backward(dout)
         return dout
 
     def reset_state(self):
+        """Reset recurrent internal state."""
         self.rnn_layer.reset_state()
 

@@ -10,6 +10,7 @@ char_to_id = {}
 
 
 def _update_vocab(txt):
+    """Execute _update_vocab."""
     chars = list(txt)
 
     for i, char in enumerate(chars):
@@ -20,6 +21,7 @@ def _update_vocab(txt):
 
 
 def load_data(file_name='addition.txt', seed=1984):
+    """Load dataset arrays from disk."""
     file_path = os.path.dirname(os.path.abspath(__file__)) + '/' + file_name
 
     if not os.path.exists(file_path):
@@ -65,4 +67,5 @@ def load_data(file_name='addition.txt', seed=1984):
 
 
 def get_vocab():
+    """Return current vocabulary mappings."""
     return char_to_id, id_to_char

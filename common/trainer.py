@@ -119,6 +119,7 @@ def remove_duplicate(params, grads):
 
 class RnnlmTrainer:
     def __init__(self, model, optimizer):
+        """Initialize the RnnlmTrainer instance."""
         self.model = model
         self.optimizer = optimizer
         self.time_idx = None
@@ -127,6 +128,7 @@ class RnnlmTrainer:
         self.current_epoch = 0
 
     def get_batch(self, x, t, batch_size, time_size):
+        """Build a mini-batch for sequence training."""
         batch_x = np.empty((batch_size, time_size), dtype="i")
         batch_t = np.empty((batch_size, time_size), dtype="i")
 
@@ -153,6 +155,7 @@ class RnnlmTrainer:
         max_grad=None,
         eval_interval=20,
     ):
+        """Train the model with provided data."""
         data_size = len(xs)
         max_iters = data_size // (batch_size * time_size)
         self.time_idx = 0
@@ -199,6 +202,7 @@ class RnnlmTrainer:
             self.current_epoch += 1
 
     def plot(self, ylim=None):
+        """Plot tracked metrics."""
         x = np.arange(len(self.ppl_list))
         if ylim is not None:
             plt.ylim(*ylim)

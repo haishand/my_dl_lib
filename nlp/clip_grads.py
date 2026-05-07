@@ -1,6 +1,7 @@
 import numpy as np
 
 def clip_grads(grads, max_norm):
+    """Execute clip_grads."""
     total_norm = 0
     for g in grads:
         total_norm += np.sum(g**2)

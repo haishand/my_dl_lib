@@ -17,6 +17,7 @@ class RNN:
     """
 
     def __init__(self, Wx, Wh, b) -> None:
+        """Initialize the RNN instance."""
         self.params = [Wx, Wh, b]
         self.grads = [np.zeros_like(Wx), np.zeros_like(Wh), np.zeros_like(b)]
 
@@ -29,6 +30,7 @@ class RNN:
         self.cache = None
 
     def forward(self, x, h_prev):
+        """Run the forward pass."""
         Wx, Wh, b = self.params
 
         h_Wh = self.mat_h.forward(h_prev)
@@ -39,6 +41,7 @@ class RNN:
         return h_next
 
     def backward(self, dh_next):
+        """Run the backward pass."""
         Wx, Wh, b = self.params
 
         dsum2 = self.tanh.backward(dh_next)
@@ -59,6 +62,7 @@ class TimeRNN:
     """
 
     def __init__(self, Wx, Wh, b, stateful=False):
+        """Initialize the TimeRNN instance."""
         self.params = [Wx, Wh, b]
         self.grads = [np.zeros_like(Wx), np.zeros_like(Wh), np.zeros_like(b)]
         self.layers = None
@@ -66,12 +70,15 @@ class TimeRNN:
         self.stateful = stateful
 
     def set_state(self, h):
+        """Set recurrent internal state."""
         self.h = h
 
     def reset_state(self):
+        """Reset recurrent internal state."""
         self.h = None
 
     def forward(self, xs):
+        """Run the forward pass."""
         Wx, Wh, b = self.params
         N, T, D = xs.shape
         D, H = Wx.shape
@@ -90,6 +97,7 @@ class TimeRNN:
         return hs
 
     def backward(self, dhs):
+        """Run the backward pass."""
         Wx, Wh, b = self.params
         N, T, H = dhs.shape
         D, H = Wx.shape
@@ -113,12 +121,14 @@ class TimeRNN:
 
 class TimeAffine:
     def __init__(self, W, b):
+        """Initialize the TimeAffine instance."""
         self.params = [W, b]
         self.grads = [np.zeros_like(W), np.zeros_like(b)]
         self.layers = None
         self.x = None
 
     def forward(self, xs):
+        """Run the forward pass."""
         N, T, D = xs.shape
         W, b = self.params
 
@@ -128,6 +138,7 @@ class TimeAffine:
         return out.reshape(N, T, -1)
 
     def backward(self, dout):
+        """Run the backward pass."""
         xs = self.x
         N, T, D = xs.shape
         W, b = self.params
@@ -145,11 +156,13 @@ class TimeAffine:
 
 class TimeEmbedding:
     def __init__(self, W):
+        """Initialize the TimeEmbedding instance."""
         self.params = [W]
         self.grads = [np.zeros_like(W)]
         self.layers = None
 
     def forward(self, xs):
+        """Run the forward pass."""
         (W,) = self.params
         N, T = xs.shape
         V, D = W.shape
@@ -162,6 +175,7 @@ class TimeEmbedding:
         return out
 
     def backward(self, dout):
+        """Run the backward pass."""
         N, T, D = dout.shape
 
         grads = 0
@@ -174,10 +188,12 @@ class TimeEmbedding:
 
 class TimeSoftmaxWithLoss:
     def __init__(self):
+        """Initialize the TimeSoftmaxWithLoss instance."""
         self.layers = None
         self.cache = None
 
     def forward(self, xs, ts):
+        """Run the forward pass."""
         N, T, V = xs.shape
         self.cache = (N, T, V)
 
@@ -190,6 +206,7 @@ class TimeSoftmaxWithLoss:
         return loss / T
 
     def backward(self, dout=1):
+        """Run the backward pass."""
         N, T, V = self.cache
         dxs = np.empty((N, T, V), dtype="f")
         for t in range(T):
@@ -202,11 +219,13 @@ class TimeSoftmaxWithLoss:
 
 class LSTM:
     def __init__(self, Wx, Wh, b):
+        """Initialize the LSTM instance."""
         self.params = [Wx, Wh, b]
         self.grads = [np.zeros_like(Wx), np.zeros_like(Wh), np.zeros_like(b)]
         self.cache = None
 
     def forward(self, x, h_prev, c_prev):
+        """Run the forward pass."""
         Wx, Wh, b = self.params
         N, H = h_prev.shape
 
@@ -230,6 +249,7 @@ class LSTM:
         return h_next, c_next
 
     def backward(self, dh, dc):
+        """Run the backward pass."""
         x, h_prev, c_prev, i, f, g, o, c_next = self.cache
         Wx, Wh, b = self.params
 
@@ -260,6 +280,7 @@ class LSTM:
 
 class TimeLSTM:
     def __init__(self, Wx, Wh, b, stateful=False):
+        """Initialize the TimeLSTM instance."""
         self.params = [Wx, Wh, b]
         self.grads = [np.zeros_like(Wx), np.zeros_like(Wh), np.zeros_like(b)]
         self.layers = None
@@ -267,6 +288,7 @@ class TimeLSTM:
         self.stateful = stateful
 
     def forward(self, xs):
+        """Run the forward pass."""
         Wx, Wh, b = self.params
         N, T, D = xs.shape
         H = Wh.shape[0]
@@ -287,6 +309,7 @@ class TimeLSTM:
         return hs
 
     def backward(self, dhs):
+        """Run the backward pass."""
         Wx, Wh, b = self.params
         N, T, H = dhs.shape
         D, H = Wx.shape
@@ -309,31 +332,36 @@ class TimeLSTM:
         return dxs
 
     def set_state(self, h, c):
+        """Set recurrent internal state."""
         self.h = h
         self.c = c
 
     def reset_state(self):
+        """Reset recurrent internal state."""
         self.h = None
         self.c = None
 
 
 class TimeDropout:
     def __init__(self, dropout_ratio=0.5):
+        """Initialize the TimeDropout instance."""
+        self.params, self.grads = [], []
         self.dropout_ratio = dropout_ratio
         self.train_flg = True
+        self.mask = None
 
     def forward(self, xs):
+        """Run the forward pass."""
         if self.train_flg:  # 训练模式，执行dropout
             flg = rd(*xs.shape) > self.dropout_ratio
-
             scale = 1.0 / (1.0 - self.dropout_ratio)
-
             self.mask = flg.astype("f") * scale
-
             return xs * self.mask
 
         else:  # 测试模式，不做dropout，直接返回
+            self.mask = np.ones_like(xs, dtype="f")
             return xs
 
     def backward(self, dout):
+        """Run the backward pass."""
         return dout * self.mask

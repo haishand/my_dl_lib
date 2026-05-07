@@ -8,13 +8,16 @@ from common.basic_layers import *
 
 class AddLayer:
     def __init__(self):
+        """Initialize the AddLayer instance."""
         self.params, self.grads = [], []
 
     def forward(self, x, y):
+        """Run the forward pass."""
         out = x + y
         return out
 
     def backward(self, dout=1):
+        """Run the backward pass."""
         dx = dout * 1
         dy = dout * 1
         return dx, dy
@@ -22,15 +25,18 @@ class AddLayer:
 
 class MulLayer:
     def __init__(self):
+        """Initialize the MulLayer instance."""
         self.params, self.grads = [], []
         self.cache = None
 
     def forward(self, x, y):
+        """Run the forward pass."""
         self.cache = (x, y)
         out = x * y
         return out
 
     def backward(self, dout=1):
+        """Run the backward pass."""
         x, y = self.cache
         dx = dout * y
         dy = dout * x
@@ -39,17 +45,20 @@ class MulLayer:
 
 class MatMul:
     def __init__(self, W):
+        """Initialize the MatMul instance."""
         self.params = [W]
         self.grads = [np.zeros_like(W)]
         self.cache = None
 
     def forward(self, x):
+        """Run the forward pass."""
         (W,) = self.params
         self.cache = x
         out = np.dot(x, W)
         return out
 
     def backward(self, dout=1):
+        """Run the backward pass."""
         (W,) = self.params
         x = self.cache
         dx = np.dot(dout, W.T)
@@ -61,17 +70,20 @@ class MatMul:
 class TanhLayer:
     def __init__(self):
         # 激活层无参数
+        """Initialize the TanhLayer instance."""
         self.params = []
         self.grads = []
         self.cache = None
 
     def forward(self, x):
         # 前向
+        """Run the forward pass."""
         y = np.tanh(x)
         self.cache = y  # 缓存输出，反向要用
         return y
 
     def backward(self, dout):
+        """Run the backward pass."""
         y = self.cache
         # tanh 导数: dy/dx = 1 - y²
         dx = dout * (1 - y**2)
@@ -98,6 +110,7 @@ class Sigmoid:
 
 class MyAffine:
     def __init__(self, W, b):
+        """Initialize the MyAffine instance."""
         self.params = [W, b]
         self.grads = [np.zeros_like(W), np.zeros_like(b)]
         self.matmul = MatMul(W)
@@ -105,12 +118,14 @@ class MyAffine:
         self.x = None
 
     def forward(self, x):
+        """Run the forward pass."""
         self.x = x
         out = self.matmul.forward(x)
         out = self.add.forward(out, self.params[1])
         return out
 
     def backward(self, dout):
+        """Run the backward pass."""
         dout, db = self.add.backward(dout)
         dx = self.matmul.backward(dout)
         self.grads[0][...] = self.matmul.grads[0]
@@ -174,17 +189,20 @@ class SoftmaxWithLoss:
 
 class Embedding:
     def __init__(self, W):
+        """Initialize the Embedding instance."""
         self.params = [W]
         self.grads = [np.zeros_like(W)]
         self.idx = None
 
     def forward(self, idx):
+        """Run the forward pass."""
         (W,) = self.params
         self.idx = idx
         out = W[idx]
         return out
 
     def backward(self, dout):
+        """Run the backward pass."""
         (dW,) = self.grads
         dW[...] = 0
         if GPU:

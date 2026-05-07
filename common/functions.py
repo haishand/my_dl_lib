@@ -16,6 +16,7 @@ def softmax(x):
 
 
 def softmax(x, axis=-1):
+    """Execute softmax."""
     x = x - np.max(x, axis=axis, keepdims=True)
     exp_x = np.exp(x)
     return exp_x / np.sum(exp_x, axis=axis, keepdims=True)
@@ -37,9 +38,11 @@ def cross_entropy_error(y, t):
 
 
 def sigmoid(x):
+    """Execute sigmoid."""
     out = 1 / (1 + np.exp(-x))
     return out
 
 
 def relu(x):
+    """Execute relu."""
     return np.maximum(0, x)

@@ -27,6 +27,7 @@ dataset_dir = os.path.dirname(os.path.abspath(__file__))
 
 
 def _download(file_name):
+    """Execute _download."""
     file_path = dataset_dir + '/' + file_name
     if os.path.exists(file_path):
         return
@@ -44,6 +45,7 @@ def _download(file_name):
 
 
 def load_vocab():
+    """Load or create vocabulary mappings."""
     vocab_path = dataset_dir + '/' + vocab_file
 
     if os.path.exists(vocab_path):

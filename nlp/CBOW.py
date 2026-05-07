@@ -5,6 +5,7 @@ from common.layers import MatMul, SoftmaxWithLoss
 
 class SimpleCBOW:
     def __init__(self, vocab_size, hidden_size):
+        """Initialize the SimpleCBOW instance."""
         V, H = vocab_size, hidden_size
 
         W_in = 0.01 * np.random.randn(V, H).astype("f")
@@ -25,6 +26,7 @@ class SimpleCBOW:
         self.word_vecs = W_in
 
     def predict(self, contexts):
+        """Generate predictions from inputs."""
         h0 = self.in_layer0.forward(contexts[:, 0, :])
         h1 = self.in_layer1.forward(contexts[:, 1, :])
         h = (h0 + h1) / 2
@@ -32,6 +34,7 @@ class SimpleCBOW:
         return score
 
     def forward(self, contexts, target):
+        """Run the forward pass."""
         h0 = self.in_layer0.forward(contexts[:, 0, :])
         h1 = self.in_layer1.forward(contexts[:, 1, :])
         h = (h0 + h1) / 2
@@ -41,6 +44,7 @@ class SimpleCBOW:
         return loss
 
     def backward(self, dout=1):
+        """Run the backward pass."""
         ds = self.loss_layer.backward(dout)
         da = self.out_layer.backward(ds)
         da *= 0.5
