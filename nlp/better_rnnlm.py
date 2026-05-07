@@ -18,6 +18,7 @@ from nlp.time_layer import (
 
 class BetterRnnLM(BaseModel):
     def __init__(self, vocab_size, wordvec_size, hidden_size, dropout_ratio=0.5):
+        super().__init__()
         """Initialize the BetterRnnLM instance."""
         V, D, H = vocab_size, wordvec_size, hidden_size
 
