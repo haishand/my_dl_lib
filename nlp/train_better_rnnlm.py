@@ -9,7 +9,7 @@ from common.optimizer import SGD
 from dataset import ptb
 
 # 设定超参
-max_epoch = 2
+max_epoch = 4
 batch_size = 20
 wordvec_size = 650  # 词向量维度
 hidden_size = 650  # 隐藏层维度

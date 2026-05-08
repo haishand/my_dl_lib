@@ -1,6 +1,7 @@
 # coding: utf-8
 import sys
-sys.path.append('..')
+
+sys.path.append("..")
 import os
 import numpy
 
@@ -20,18 +21,18 @@ def _update_vocab(txt):
             id_to_char[tmp_id] = char
 
 
-def load_data(file_name='addition.txt', seed=1984):
+def load_data(file_name="addition.txt", seed=1984):
     """Load dataset arrays from disk."""
-    file_path = os.path.dirname(os.path.abspath(__file__)) + '/' + file_name
+    file_path = os.path.dirname(os.path.abspath(__file__)) + "/" + file_name
 
     if not os.path.exists(file_path):
-        print('No file: %s' % file_name)
+        print("No file: %s" % file_name)
         return None
 
     questions, answers = [], []
 
-    for line in open(file_path, 'r'):
-        idx = line.find('_')
+    for line in open(file_path, "r"):
+        idx = line.find("_")
         questions.append(line[:idx])
         answers.append(line[idx:-1])
 
@@ -42,8 +43,8 @@ def load_data(file_name='addition.txt', seed=1984):
         _update_vocab(a)
 
     # create numpy array
-    x = numpy.zeros((len(questions), len(questions[0])), dtype=numpy.int)
-    t = numpy.zeros((len(questions), len(answers[0])), dtype=numpy.int)
+    x = numpy.zeros((len(questions), len(questions[0])), dtype=int)
+    t = numpy.zeros((len(questions), len(answers[0])), dtype=int)
 
     for i, sentence in enumerate(questions):
         x[i] = [char_to_id[c] for c in list(sentence)]
