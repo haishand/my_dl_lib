@@ -5,7 +5,7 @@ from nlp.skip_gram import Skip_Gram
 import numpy as np
 from common.util import convert_one_hot, preprocess, create_contexts_target
 from common.optimizer import SGD
-from CBOW import SimpleCBOW
+from cbow import SimpleCBOW
 from common.trainer import Trainer
 from skip_gram import Skip_Gram
 

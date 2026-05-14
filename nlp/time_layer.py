@@ -331,10 +331,9 @@ class TimeLSTM:
         self.dh = dh
         return dxs
 
-    def set_state(self, h, c):
+    def set_state(self, h, c=None):
         """Set recurrent internal state."""
-        self.h = h
-        self.c = c
+        self.h, self.c = h, c
 
     def reset_state(self):
         """Reset recurrent internal state."""

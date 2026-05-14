@@ -2,9 +2,14 @@ import pickle
 
 
 class BaseModel:
-    def __init__(self):
+    def __init__(self, layers=None):
         """Initialize the BaseModel instance."""
         self.params, self.grads = None, None
+        if layers is not None:
+            self.params, self.grads = [], []
+            for layer in layers:
+                self.params += layer.params
+                self.grads += layer.grads
 
     # 放在方法里而非构造函数中
     #        self.file_name = self.__class__.__name__ + ".pkl"
