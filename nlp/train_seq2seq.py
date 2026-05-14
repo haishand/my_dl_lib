@@ -1,11 +1,13 @@
 import sys, os
 
 sys.path.append(os.getcwd())
+import numpy as np
 from dataset import sequence
-from seq2seq import Seq2seq
+from seq2seq import Seq2seq, PeekySeq2seq
 from common.optimizer import Adam
 from common.trainer import Trainer
 from common.util import eval_seq2seq
+import matplotlib.pyplot as plt
 
 # 读入数据
 (x_train, t_train), (x_test, t_test) = sequence.load_data("addition.txt")
@@ -24,7 +26,7 @@ max_epoch = 10
 max_grad = 5.0
 
 # 生成模型
-model = Seq2seq(vocab_size, wordvec_size, hidden_size)
+model = PeekySeq2seq(vocab_size, wordvec_size, hidden_size)
 optimizer = Adam()
 trainer = Trainer(model, optimizer)
 
@@ -36,8 +38,16 @@ for epoch in range(max_epoch):
         question, correct = x_test[[i]], t_test[[i]]
         verbose = i < 10
         correct_num += eval_seq2seq(
-            model, question, correct, id_to_char, verbos=True, is_reverse=reversed
+            model, question, correct, id_to_char, verbos=False, is_reverse=reversed
         )
     acc = float(correct_num) / len(x_test)
     acc_list.append(acc)
     print("accuracy: %.3f%%" % (acc * 100))
+
+# 绘制图形
+x = np.arange(len(acc_list))
+plt.plot(x, acc_list, marker="o")
+plt.xlabel("epochs")
+plt.ylabel("accuracy")
+plt.ylim(0, 1.0)
+plt.show()
