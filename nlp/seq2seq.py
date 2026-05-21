@@ -12,10 +12,9 @@ class Encoder(BaseModel):
         lstm_Wh = (rn(H, 4 * H) / np.sqrt(H)).astype("f")
         lstm_b = np.zeros(4 * H)
 
-        self.layers = [
-            TimeEmbedding(embed_W),
-            TimeLSTM(lstm_Wx, lstm_Wh, lstm_b, stateful=False),
-        ]
+        self.embed_layer = TimeEmbedding(embed_W)
+        self.lstm_layer = TimeLSTM(lstm_Wx, lstm_Wh, lstm_b, stateful=False)
+        self.layers = [self.embed_layer]
         super().__init__(self.layers)
         self.hs = None
 
